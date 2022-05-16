@@ -1,8 +1,6 @@
 import { ConfigEnvironmentDto } from './config.environment.dto';
 import { validateConfig } from '@boilerplate/config';
-import {defaultConfig, Environment} from './config.default';
-
-
+import { defaultConfig, Environment } from './config.default';
 
 export interface BaseConfig {
   port: number;

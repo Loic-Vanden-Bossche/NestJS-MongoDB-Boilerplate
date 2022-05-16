@@ -10,7 +10,7 @@ import {
   isPortNumber,
   isUrlArray,
   isValidPeriod,
-} from '@boilerplate/validators';
+} from '@boilerplate/config/validators';
 import { ConfigValidators, Validator } from '@boilerplate/config';
 import {
   TransformArray,
@@ -19,8 +19,8 @@ import {
   UseDefault as BaseUseDefault,
   UseEnvPort,
 } from 'libs/config/src/transformators';
-import { defaultConfig, Environment} from './config.default';
-import { Desc, Secret } from '@boilerplate/decorators';
+import { defaultConfig, Environment } from './config.default';
+import { Desc, Secret } from '@boilerplate/config/decorators';
 
 const UseDefault = () => BaseUseDefault(defaultConfig);
 

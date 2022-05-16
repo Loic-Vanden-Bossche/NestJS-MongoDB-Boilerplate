@@ -22,9 +22,11 @@
     "resolveJsonModule": true,
     "paths": {
       "@boilerplate/config": ["libs/config/src/index.ts"],
-      "@boilerplate/validators": ["libs/config/src/validators/index.ts"],
-      "@boilerplate/transformers": ["libs/config/src/transformers/index.ts"],
-      "@boilerplate/decorators": ["libs/config/src/decorators/index.ts"]
+      "@boilerplate/config/validators": ["libs/config/src/validators/index.ts"],
+      "@boilerplate/config/transformers": ["libs/config/src/transformers/index.ts"],
+      "@boilerplate/config/decorators": ["libs/config/src/decorators/index.ts"],
+      "@boilerplate/utils": ["libs/utils/src/index.ts"],
+      "@boilerplate/changelog": ["libs/changelog/src/index.ts"],
     },
   },
   "allowSyntheticDefaultImports": true,

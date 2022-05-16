@@ -1,13 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import {ConfigService} from "@nestjs/config";
-import {APIConfig} from "./config/config";
-import {checkOrigin} from "./cors";
-import {HttpException, Logger, ValidationPipe} from "@nestjs/common";
-import * as fs from "fs";
-import {initializeSwagger} from "./swagger";
-import {generateAPIDocs} from "./api.doc";
-import {Environment} from "./config/config.default";
+import { ConfigService } from '@nestjs/config';
+import { APIConfig } from './config/config';
+import { checkOrigin } from './cors';
+import { HttpException, Logger, ValidationPipe } from '@nestjs/common';
+import * as fs from 'fs';
+import { initializeSwagger } from './swagger';
+import { generateAPIDocs } from './api.doc';
+import { defaultConfig, Environment } from './config/config.default';
+import { triggerConfigDocGen } from '@boilerplate/config';
+import { ConfigEnvironmentDto } from './config/config.environment.dto';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -53,7 +56,10 @@ async function bootstrap() {
       });
 
     if (env === Environment.DEV) {
-      /*await triggerConfigDocGen(
+      await triggerConfigDocGen(
+        ConfigEnvironmentDto,
+        defaultConfig,
+        'Exemple APP environment configuration.',
         'CONFIG.md',
         path.join(process.cwd(), 'src', 'config'),
       ).then((config) => {
@@ -63,13 +69,17 @@ async function bootstrap() {
         } else {
           logger.debug('Configuration doc file already up to date');
         }
-      });*/
+      });
     }
-
-    app.useGlobalPipes(new ValidationPipe());
-
   }
 
-  await app.listen(configService.get<number>('port'));
+  app.useGlobalPipes(new ValidationPipe());
+
+  await app.listen(configService.get<number>('port'), () => {
+    Logger.log(
+      `Server running on http://localhost:${configService.get<number>('port')}`,
+      'Server',
+    );
+  });
 }
 bootstrap();

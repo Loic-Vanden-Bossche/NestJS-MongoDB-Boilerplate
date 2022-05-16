@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {Environment} from "./config.default";
+import { Environment } from './config.default';
 
 export const databaseUseSSL = (env: Environment): boolean => {
   return env === Environment.PROD || env === Environment.PREPROD;

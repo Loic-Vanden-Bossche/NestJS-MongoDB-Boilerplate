@@ -1,0 +1,7 @@
+{
+  "name": "@boilerplate/changelog",
+  "version": "1.0.0",
+  "bin": {
+    "hello": "cli-bootstrap.js"
+  }
+}
