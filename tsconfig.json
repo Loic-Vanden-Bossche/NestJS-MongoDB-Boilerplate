@@ -15,7 +15,18 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "keyofStringsOnly": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "paths": {
+      "@boilerplate/config": ["libs/config/src/index.ts"],
+      "@boilerplate/validators": ["libs/config/src/validators/index.ts"],
+      "@boilerplate/transformers": ["libs/config/src/transformers/index.ts"],
+      "@boilerplate/decorators": ["libs/config/src/decorators/index.ts"]
+    },
+  },
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true
 }
