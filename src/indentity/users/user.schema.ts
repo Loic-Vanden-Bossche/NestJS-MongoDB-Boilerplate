@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Token } from '../tokens/token.schema';
+import { Role } from '../../shared/role';
 
 export type UserDocument = User & Document;
 
@@ -24,6 +25,13 @@ export class User {
 
   @Prop()
   password: string;
+
+  @Prop({
+    default: Role.User,
+    enum: Role,
+    type: String,
+  })
+  role: Role;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Token' }] })
   tokens: Token[];

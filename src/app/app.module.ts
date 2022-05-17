@@ -1,13 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { getConfig } from '../config/config';
 import { getEnvFilesPaths } from '../config/config.utils';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TokensModule } from '../tokens/tokens.module';
-import { UsersModule } from '../users/users.module';
 import { LoggerModule } from '../logger/logger.module';
+import { LogsMiddleware } from '../logger/logs.middleware';
+import { IdentityModule } from '../indentity/identity.module';
 
 @Module({
   imports: [
@@ -18,11 +17,13 @@ import { LoggerModule } from '../logger/logger.module';
       cache: true,
     }),
     MongooseModule.forRoot('mongodb://localhost/exemple'),
-    TokensModule,
-    UsersModule,
+    IdentityModule,
     LoggerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogsMiddleware).forRoutes('*');
+  }
+}

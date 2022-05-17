@@ -28,12 +28,4 @@ export default class UpdateMeDto {
     example: 'Johnny',
   })
   username?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    description: 'User avatar seed',
-    example: 'yXIwnkiN4CJclKEk0pm0',
-  })
-  avatarSeed?: string;
 }

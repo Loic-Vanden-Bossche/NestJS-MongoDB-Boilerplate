@@ -10,7 +10,7 @@ export class Log {
   id: Types.ObjectId;
 
   @Prop()
-  context: number;
+  context: string;
 
   @Prop()
   message: string;

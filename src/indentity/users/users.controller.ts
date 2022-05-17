@@ -11,11 +11,11 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create.user.dto';
 import UpdateUserDto from './dto/update.user.dto';
-import { Roles } from '../shared/decorators/roles.decorator';
-import { Role } from '../shared/role';
 import UpdateMeDto from './dto/update.me.dto';
-import { User } from '../shared/decorators/user.decorator';
-import { checkObjectId } from '../shared/utils';
+import { Role } from '../../shared/role';
+import { Roles } from '../../shared/decorators/roles.decorator';
+import { checkObjectId } from '../../shared/utils';
+import { User } from '../../shared/decorators/user.decorator';
 
 @ApiTags('Users')
 @Controller('users')

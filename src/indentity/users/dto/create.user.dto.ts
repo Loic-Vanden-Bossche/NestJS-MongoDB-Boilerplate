@@ -8,7 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../shared/role';
+import { Role } from '../../../shared/role';
 
 export default class CreateUserDto {
   @IsString()

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
-import { APIConfig } from './config/config';
+import { APIConfig, CookieConfig } from './config/config';
 import { checkOrigin } from './cors';
 import { HttpException, Logger, ValidationPipe } from '@nestjs/common';
 import * as fs from 'fs';
@@ -11,11 +11,19 @@ import { defaultConfig, Environment } from './config/config.default';
 import { triggerConfigDocGen } from '@boilerplate/config';
 import { ConfigEnvironmentDto } from './config/config.environment.dto';
 import * as path from 'path';
+import { UsersService } from './indentity/users/users.service';
+import CustomLogger from './logger/logger';
+import * as cookieParser from 'cookie-parser';
+import * as csurf from 'csurf';
+import helmet from 'helmet';
+import { getSameSiteStrategy } from './config/config.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   const configService = app.get<ConfigService<APIConfig>>(ConfigService);
   const env = configService.get<Environment>('env');
+
+  app.useLogger(app.get(CustomLogger));
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -35,6 +43,19 @@ async function bootstrap() {
     },
     credentials: true,
   });
+
+  app.use(helmet());
+  app.use(cookieParser());
+  app.use(
+    csurf({
+      cookie: {
+        httpOnly: true,
+        secure: configService.get<CookieConfig>('cookie').secure,
+        sameSite: getSameSiteStrategy(configService.get<Environment>('env')),
+      },
+      value: (req) => req.csrfToken(),
+    }),
+  );
 
   if (env !== Environment.PROD && env !== Environment.TEST) {
     const logger = new Logger('Docs');
@@ -74,6 +95,8 @@ async function bootstrap() {
   }
 
   app.useGlobalPipes(new ValidationPipe());
+
+  await app.get(UsersService).createAdminAccount();
 
   await app.listen(configService.get<number>('port'), () => {
     Logger.log(

@@ -1,13 +1,16 @@
 import { User } from './user.schema';
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '../../shared/role';
+import { Types } from 'mongoose';
 
 export default class CurrentUser {
-  constructor(user: Partial<User>) {
-    this.id = user.id.toString();
+  constructor(user: Partial<User & { _id: Types.ObjectId }>) {
+    this.id = (user.id as unknown as string) || user._id?.toHexString();
     this.email = user.email;
     this.firstname = user.firstname;
     this.lastname = user.lastname;
     this.username = user.username;
+    this.role = user.role;
   }
 
   @ApiProperty({
@@ -39,4 +42,10 @@ export default class CurrentUser {
     example: 'Johnny',
   })
   username: string = null;
+
+  @ApiProperty({
+    description: "The user's role",
+    example: Role.User,
+  })
+  role: Role = null;
 }

@@ -23,18 +23,18 @@ Base URLs:
 
 ```shell
 # You can also use wget
-curl -X GET /
+curl -X GET /health
 
 ```
 
 ```http
-GET / HTTP/1.1
+GET /health HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/',
+fetch('/health',
 {
   method: 'GET'
 
@@ -51,7 +51,7 @@ fetch('/',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/',
+result = RestClient.get '/health',
   params: {
   }
 
@@ -62,7 +62,7 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/')
+r = requests.get('/health')
 
 print(r.json())
 
@@ -79,7 +79,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/', array(
+    $response = $client->request('GET','/health', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -96,7 +96,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/");
+URL obj = new URL("/health");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -123,7 +123,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/", data)
+    req, err := http.NewRequest("GET", "/health", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -133,7 +133,7 @@ func main() {
 
 ```
 
-`GET /`
+`GET /health`
 
 <h3 id="appcontroller_gethello-responses">Responses</h3>
 
@@ -623,8 +623,7 @@ const inputBody = '{
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "password": "123456",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "password": "123456"
 }';
 const headers = {
   'Content-Type':'application/json'
@@ -756,8 +755,7 @@ func main() {
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "password": "123456",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "password": "123456"
 }
 ```
 
@@ -940,8 +938,7 @@ Content-Type: application/json
 const inputBody = '{
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "username": "Johnny"
 }';
 const headers = {
   'Content-Type':'application/json'
@@ -1072,8 +1069,7 @@ func main() {
 {
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "username": "Johnny"
 }
 ```
 
@@ -1091,6 +1087,1039 @@ func main() {
 
 <aside class="success">
 This operation does not require authentication
+</aside>
+
+<h1 id="exemple-app-auth">Auth</h1>
+
+## AuthController_login
+
+<a id="opIdAuthController_login"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /auth/login \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+```http
+POST /auth/login HTTP/1.1
+
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "email": "exemple.test@gmail.com",
+  "password": "123456"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json'
+};
+
+fetch('/auth/login',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json',
+  'Accept' => 'application/json'
+}
+
+result = RestClient.post '/auth/login',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+r = requests.post('/auth/login', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/auth/login', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/login");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/auth/login", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /auth/login`
+
+*[Public] Login using credentials*
+
+> Body parameter
+
+```json
+{
+  "email": "exemple.test@gmail.com",
+  "password": "123456"
+}
+```
+
+<h3 id="authcontroller_login-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[LoginAuthDto](#schemaloginauthdto)|true|Login data|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "role": "user"
+}
+```
+
+<h3 id="authcontroller_login-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Login successful|[CurrentUser](#schemacurrentuser)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Login failed - Bad credentials|None|
+
+### Response Headers
+
+|Status|Header|Type|Format|Description|
+|---|---|---|---|---|
+|200|Set-Cookie|undefined||Authorization cookie|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AuthController_register
+
+<a id="opIdAuthController_register"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /auth/register \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+```http
+POST /auth/register HTTP/1.1
+
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "email": "exemple.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "password": "123456"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json'
+};
+
+fetch('/auth/register',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json',
+  'Accept' => 'application/json'
+}
+
+result = RestClient.post '/auth/register',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+r = requests.post('/auth/register', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/auth/register', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/register");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/auth/register", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /auth/register`
+
+*[Public] Register standalone/organization*
+
+> Body parameter
+
+```json
+{
+  "email": "exemple.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "password": "123456"
+}
+```
+
+<h3 id="authcontroller_register-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[RegisterAuthDto](#schemaregisterauthdto)|true|none|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "role": "user"
+}
+```
+
+<h3 id="authcontroller_register-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Register successful|[CurrentUser](#schemacurrentuser)|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Register failed - Email already exists|None|
+
+### Response Headers
+
+|Status|Header|Type|Format|Description|
+|---|---|---|---|---|
+|201|Set-Cookie|undefined||Authorization cookie|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AuthController_regenerateTokens
+
+<a id="opIdAuthController_regenerateTokens"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /auth/refresh-tokens
+
+```
+
+```http
+GET /auth/refresh-tokens HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/auth/refresh-tokens',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/auth/refresh-tokens',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/auth/refresh-tokens')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/auth/refresh-tokens', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/refresh-tokens");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/auth/refresh-tokens", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /auth/refresh-tokens`
+
+*[User] Get a new jwt using refresh token*
+
+<h3 id="authcontroller_regeneratetokens-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Refresh token successful|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Refresh token failed - Expired token or not logged in|None|
+
+### Response Headers
+
+|Status|Header|Type|Format|Description|
+|---|---|---|---|---|
+|200|Set-Cookie|undefined||Authorization cookie|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+cookie
+</aside>
+
+## AuthController_getProfile
+
+<a id="opIdAuthController_getProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /auth/me \
+  -H 'Accept: application/json'
+
+```
+
+```http
+GET /auth/me HTTP/1.1
+
+Accept: application/json
+
+```
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/auth/me',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Accept' => 'application/json'
+}
+
+result = RestClient.get '/auth/me',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.get('/auth/me', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Accept' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/auth/me', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/me");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/auth/me", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /auth/me`
+
+*[User] Get the currently logged user*
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "role": "user"
+}
+```
+
+<h3 id="authcontroller_getprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Current logged user|[CurrentUser](#schemacurrentuser)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not logged in|None|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+cookie
+</aside>
+
+## AuthController_resetPassword
+
+<a id="opIdAuthController_resetPassword"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /auth/reset-password
+
+```
+
+```http
+GET /auth/reset-password HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/auth/reset-password',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/auth/reset-password',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/auth/reset-password')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/auth/reset-password', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/reset-password");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/auth/reset-password", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /auth/reset-password`
+
+*[User] Trigger reset-password procedure*
+
+<h3 id="authcontroller_resetpassword-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+cookie
+</aside>
+
+## AuthController_changePassword
+
+<a id="opIdAuthController_changePassword"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /auth/change-password \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+POST /auth/change-password HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "token": "b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb",
+  "oldPassword": "123456",
+  "newPassword": "12345612"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/auth/change-password',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.post '/auth/change-password',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.post('/auth/change-password', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/auth/change-password', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/change-password");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/auth/change-password", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /auth/change-password`
+
+*[User] Change the password of the currently logged user using token*
+
+> Body parameter
+
+```json
+{
+  "token": "b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb",
+  "oldPassword": "123456",
+  "newPassword": "12345612"
+}
+```
+
+<h3 id="authcontroller_changepassword-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[ChangePasswordDto](#schemachangepassworddto)|true|none|
+
+<h3 id="authcontroller_changepassword-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+cookie
 </aside>
 
 # Schemas
@@ -1136,8 +2165,7 @@ This operation does not require authentication
 {
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "username": "Johnny"
 }
 
 ```
@@ -1149,7 +2177,6 @@ This operation does not require authentication
 |firstname|string|true|none|User first name|
 |lastname|string|true|none|User last name|
 |username|string|true|none|User nickname|
-|avatarSeed|string|true|none|User avatar seed|
 
 <h2 id="tocS_UpdateUserDto">UpdateUserDto</h2>
 <!-- backwards compatibility -->
@@ -1163,8 +2190,7 @@ This operation does not require authentication
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "password": "123456",
-  "avatarSeed": "yXIwnkiN4CJclKEk0pm0"
+  "password": "123456"
 }
 
 ```
@@ -1177,5 +2203,108 @@ This operation does not require authentication
 |lastname|string|true|none|User last name|
 |username|string|true|none|User nickname|
 |password|string|true|none|User password|
-|avatarSeed|string|true|none|User avatar seed|
+
+<h2 id="tocS_LoginAuthDto">LoginAuthDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaloginauthdto"></a>
+<a id="schema_LoginAuthDto"></a>
+<a id="tocSloginauthdto"></a>
+<a id="tocsloginauthdto"></a>
+
+```json
+{
+  "email": "exemple.test@gmail.com",
+  "password": "123456"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|email|string|true|none|User email|
+|password|string|true|none|User password|
+
+<h2 id="tocS_CurrentUser">CurrentUser</h2>
+<!-- backwards compatibility -->
+<a id="schemacurrentuser"></a>
+<a id="schema_CurrentUser"></a>
+<a id="tocScurrentuser"></a>
+<a id="tocscurrentuser"></a>
+
+```json
+{
+  "id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "role": "user"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|string|true|none|The user's id|
+|email|string|true|none|The user's email|
+|firstname|string|true|none|The user's first name|
+|lastname|string|true|none|The user's last name|
+|username|string|true|none|The user's nickname|
+|role|object|true|none|The user's role|
+
+<h2 id="tocS_RegisterAuthDto">RegisterAuthDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaregisterauthdto"></a>
+<a id="schema_RegisterAuthDto"></a>
+<a id="tocSregisterauthdto"></a>
+<a id="tocsregisterauthdto"></a>
+
+```json
+{
+  "email": "exemple.test@gmail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny",
+  "password": "123456"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|email|string|true|none|User email|
+|firstname|string|true|none|User first name|
+|lastname|string|true|none|User last name|
+|username|string|true|none|User nickname|
+|password|string|true|none|User password|
+
+<h2 id="tocS_ChangePasswordDto">ChangePasswordDto</h2>
+<!-- backwards compatibility -->
+<a id="schemachangepassworddto"></a>
+<a id="schema_ChangePasswordDto"></a>
+<a id="tocSchangepassworddto"></a>
+<a id="tocschangepassworddto"></a>
+
+```json
+{
+  "token": "b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb",
+  "oldPassword": "123456",
+  "newPassword": "12345612"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|token|string|true|none|Change password token|
+|oldPassword|string|true|none|Old user password|
+|newPassword|string|true|none|New user password|
 

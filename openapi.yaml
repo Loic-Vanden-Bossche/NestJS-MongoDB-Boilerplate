@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /:
+  /health:
     get:
       operationId: AppController_getHello
       parameters: []
@@ -93,6 +93,118 @@ paths:
         "200":
           description: ""
       tags: *a1
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      summary: "[Public] Login using credentials"
+      parameters: []
+      requestBody:
+        required: true
+        description: Login data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginAuthDto"
+      responses:
+        "200":
+          description: Login successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "401":
+          description: Login failed - Bad credentials
+      tags:
+        &a2
+        - Auth
+  /auth/register:
+    post:
+      operationId: AuthController_register
+      summary: "[Public] Register standalone/organization"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterAuthDto"
+      responses:
+        "201":
+          description: Register successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "403":
+          description: Register failed - Email already exists
+      tags: *a2
+  /auth/refresh-tokens:
+    get:
+      operationId: AuthController_regenerateTokens
+      summary: "[User] Get a new jwt using refresh token"
+      parameters: []
+      responses:
+        "200":
+          description: Refresh token successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+        "401":
+          description: Refresh token failed - Expired token or not logged in
+      tags: *a2
+      security:
+        - cookie: []
+  /auth/me:
+    get:
+      operationId: AuthController_getProfile
+      summary: "[User] Get the currently logged user"
+      parameters: []
+      responses:
+        "200":
+          description: Current logged user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "401":
+          description: Not logged in
+      tags: *a2
+      security:
+        - cookie: []
+  /auth/reset-password:
+    get:
+      operationId: AuthController_resetPassword
+      summary: "[User] Trigger reset-password procedure"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+      security:
+        - cookie: []
+  /auth/change-password:
+    post:
+      operationId: AuthController_changePassword
+      summary: "[User] Change the password of the currently logged user using token"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a2
+      security:
+        - cookie: []
 info:
   title: Exemple APP
   description: The exemple APP API description
@@ -156,15 +268,10 @@ components:
           type: string
           description: User nickname
           example: Johnny
-        avatarSeed:
-          type: string
-          description: User avatar seed
-          example: yXIwnkiN4CJclKEk0pm0
       required:
         - firstname
         - lastname
         - username
-        - avatarSeed
     UpdateUserDto:
       type: object
       properties:
@@ -184,13 +291,104 @@ components:
           type: string
           description: User password
           example: "123456"
-        avatarSeed:
-          type: string
-          description: User avatar seed
-          example: yXIwnkiN4CJclKEk0pm0
       required:
         - firstname
         - lastname
         - username
         - password
-        - avatarSeed
+    LoginAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        password:
+          type: string
+          description: User password
+          example: "123456"
+      required:
+        - email
+        - password
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's id
+          example: 5e9f8f8f8f8f8f8f8f8f8f8f8
+        email:
+          type: string
+          description: The user's email
+          example: exemplle.test@gmail.com
+        firstname:
+          type: string
+          description: The user's first name
+          example: John
+        lastname:
+          type: string
+          description: The user's last name
+          example: Doe
+        username:
+          type: string
+          description: The user's nickname
+          example: Johnny
+        role:
+          type: object
+          description: The user's role
+          example: user
+      required:
+        - id
+        - email
+        - firstname
+        - lastname
+        - username
+        - role
+    RegisterAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        password:
+          type: string
+          description: User password
+          example: "123456"
+      required:
+        - email
+        - firstname
+        - lastname
+        - username
+        - password
+    ChangePasswordDto:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Change password token
+          example: b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb
+        oldPassword:
+          type: string
+          description: Old user password
+          example: "123456"
+        newPassword:
+          type: string
+          description: New user password
+          example: "12345612"
+      required:
+        - token
+        - oldPassword
+        - newPassword

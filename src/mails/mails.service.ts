@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { APIConfig } from '../config/config';
-import { Token } from '../tokens/token.schema';
-import CurrentUser from '../users/current';
+import CurrentUser from '../indentity/users/current';
+import { Token } from '../indentity/tokens/token.schema';
 
 @Injectable()
 export class MailsService {

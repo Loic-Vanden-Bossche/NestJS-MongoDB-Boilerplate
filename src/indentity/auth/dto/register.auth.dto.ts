@@ -1,5 +1,6 @@
 import {
-  IsDate,
+  IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Length,
@@ -7,9 +8,18 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class UpdateUserDto {
+export default class RegisterAuthDto {
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({
+    description: 'User email',
+    example: 'exemple.test@gmail.com',
+  })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
   @MaxLength(32)
   @ApiProperty({
     description: 'User first name',
@@ -18,7 +28,7 @@ export default class UpdateUserDto {
   firstname: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @MaxLength(32)
   @ApiProperty({
     description: 'User last name',
@@ -36,28 +46,11 @@ export default class UpdateUserDto {
   username?: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @Length(6, 20)
   @ApiProperty({
     description: 'User password',
     example: '123456',
   })
   password: string;
-
-  @IsString()
-  @IsOptional()
-  @Length(16)
-  refreshToken?: string;
-
-  @IsDate()
-  @IsOptional()
-  refreshTokenExpiresAt?: Date;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    description: 'User avatar seed',
-    example: 'yXIwnkiN4CJclKEk0pm0',
-  })
-  avatarSeed?: string;
 }
