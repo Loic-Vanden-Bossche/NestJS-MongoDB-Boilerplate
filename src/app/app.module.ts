@@ -4,6 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { getConfig } from '../config/config';
 import { getEnvFilesPaths } from '../config/config.utils';
+import { MongooseModule } from '@nestjs/mongoose';
+import { TokensModule } from '../tokens/tokens.module';
+import { UsersModule } from '../users/users.module';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({
   imports: [
@@ -13,6 +17,10 @@ import { getEnvFilesPaths } from '../config/config.utils';
       validate: getConfig,
       cache: true,
     }),
+    MongooseModule.forRoot('mongodb://localhost/exemple'),
+    TokensModule,
+    UsersModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

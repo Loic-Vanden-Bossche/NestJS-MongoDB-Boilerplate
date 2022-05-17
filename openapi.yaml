@@ -7,6 +7,92 @@ paths:
       responses:
         "200":
           description: ""
+  /users:
+    get:
+      operationId: UsersController_getUsers
+      summary: "[SuperAdmin] Get all users"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        &a1
+        - Users
+    post:
+      operationId: UsersController_createUser
+      summary: "[SuperAdmin] Create new user"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a1
+  "/users/{id}":
+    get:
+      operationId: UsersController_getUser
+      summary: "[SuperAdmin] Get specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+    put:
+      operationId: UsersController_updateUser
+      summary: "[SuperAdmin] Update specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+    delete:
+      operationId: UsersController_deleteUser
+      summary: "[SuperAdmin] Delete specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /users/me:
+    put:
+      operationId: UsersController_updateMe
+      summary: "[User] Update self"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMeDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a1
 info:
   title: Exemple APP
   description: The exemple APP API description
@@ -20,4 +106,91 @@ components:
       type: apiKey
       in: cookie
       name: connect.sid
-  schemas: {}
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        role:
+          type: object
+          description: User role
+          example: super_admin
+        password:
+          type: string
+          description: User password
+          example: "123456"
+      required:
+        - email
+        - firstname
+        - lastname
+        - username
+        - role
+        - password
+    UpdateMeDto:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        avatarSeed:
+          type: string
+          description: User avatar seed
+          example: yXIwnkiN4CJclKEk0pm0
+      required:
+        - firstname
+        - lastname
+        - username
+        - avatarSeed
+    UpdateUserDto:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        password:
+          type: string
+          description: User password
+          example: "123456"
+        avatarSeed:
+          type: string
+          description: User avatar seed
+          example: yXIwnkiN4CJclKEk0pm0
+      required:
+        - firstname
+        - lastname
+        - username
+        - password
+        - avatarSeed
