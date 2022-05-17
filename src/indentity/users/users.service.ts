@@ -8,10 +8,10 @@ import { Model } from 'mongoose';
 import CurrentUser from './current';
 import { AuthService } from '../auth/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { getObjectId } from '../../shared/utils';
 import { AdminConfig } from '../../config/config';
 import { defaultConfig } from '../../config/config.default';
 import { Role } from '../../shared/role';
+import {getObjectId} from "@boilerplate/utils";
 
 @Injectable()
 export class UsersService {

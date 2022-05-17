@@ -14,8 +14,8 @@ import UpdateUserDto from './dto/update.user.dto';
 import UpdateMeDto from './dto/update.me.dto';
 import { Role } from '../../shared/role';
 import { Roles } from '../../shared/decorators/roles.decorator';
-import { checkObjectId } from '../../shared/utils';
 import { User } from '../../shared/decorators/user.decorator';
+import {checkObjectId} from "@boilerplate/utils";
 
 @ApiTags('Users')
 @Controller('users')
