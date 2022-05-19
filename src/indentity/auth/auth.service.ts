@@ -17,7 +17,7 @@ import { MailsService } from '../../mails/mails.service';
 import { APIConfig, CookieConfig, RTokenConfig } from '../../config/config';
 import { Environment } from '../../config/config.default';
 import { getSameSiteStrategy } from '../../config/config.utils';
-import {getObjectId} from "@boilerplate/utils";
+import { getObjectId } from '@boilerplate/utils';
 
 @Injectable()
 export class AuthService {

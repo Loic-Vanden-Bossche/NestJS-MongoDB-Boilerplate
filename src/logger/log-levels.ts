@@ -1,4 +1,4 @@
-import { Environment } from 'src/config/config.default';
+import { Environment } from '../config/config.default';
 
 export enum LogLevels {
   ERROR = 'error',

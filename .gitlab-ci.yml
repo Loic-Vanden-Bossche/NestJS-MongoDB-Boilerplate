@@ -1,0 +1,89 @@
+image: node:lts-alpine
+
+variables:
+
+cache:
+  untracked: true
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - app/node_modules/
+
+before_script:
+  - cd app
+
+services:
+  - mongo:5.0
+
+
+stages:
+  - setup
+  - test
+  - build
+  - deploy
+
+install:
+  stage: setup
+  script:
+    - npm ci
+  rules:
+    - if: ($CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'staging') || $CI_COMMIT_BRANCH == 'staging'
+
+unit:
+  stage: test
+  script:
+    - export AP_APP_ENV=test
+    - npm run test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'staging'
+
+e2e:
+  stage: test
+  script:
+    - npm run test:e2e
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'staging'
+
+lint:
+  stage: test
+  script:
+    - npm run lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'staging'
+
+build:
+  stage: build
+  script:
+    - npm run build-app
+  rules:
+    - if: ($CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'staging') || $CI_COMMIT_BRANCH == 'staging'
+
+deploy-staging:
+  environment:
+    name: staging
+    url: https://herokup.com
+  stage: deploy
+  script:
+    - apk update && apk add git
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - npx rimraf heroku && mkdir heroku && cp package.json heroku/ && cp -r dist heroku/ && cd heroku
+    - git init
+    - git remote add heroku "https://heroku:$HEROKU_API_KEY@git.heroku.com/exemple.git"
+    - git add . && git commit -m "Deploy"
+    - git push --force heroku master
+  only:
+    - staging
+
+pages:
+  environment:
+    name: docs
+    url: https://gitlab.com
+  stage: deploy
+  script:
+    - npm run docs:build
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    paths:
+    - public
+  only:
+    - staging

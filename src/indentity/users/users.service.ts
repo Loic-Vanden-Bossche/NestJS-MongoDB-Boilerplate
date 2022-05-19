@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { AdminConfig } from '../../config/config';
 import { defaultConfig } from '../../config/config.default';
 import { Role } from '../../shared/role';
-import {getObjectId} from "@boilerplate/utils";
+import { getObjectId } from '@boilerplate/utils';
 
 @Injectable()
 export class UsersService {

@@ -18,7 +18,7 @@ import {
   TransformNumber,
   UseDefault as BaseUseDefault,
   UseEnvPort,
-} from 'libs/config/src/transformators';
+} from '@boilerplate/config/transformers';
 import { defaultConfig, Environment } from './config.default';
 import { Desc, Secret } from '@boilerplate/config/decorators';
 

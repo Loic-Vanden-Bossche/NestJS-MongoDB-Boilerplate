@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:5.0
+    restart: always
+    ports:
+      - "${AP_DB_PORT}:${AP_DB_PORT}"
+    volumes:
+      - ./db:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${AP_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${AP_DB_PASSWORD}
+      MONGO_INITDB_USERNAME: ${AP_DB_USER}
+      MONGO_INITDB_PASSWORD: ${AP_DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${AP_DB_NAME}
+

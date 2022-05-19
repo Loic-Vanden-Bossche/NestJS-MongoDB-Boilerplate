@@ -10,10 +10,10 @@
 | AP_APP_URLS_WHITELIST | http://localhost:4200 | List of urls to proxy | isUrlArray | No |
 | AP_APP_FRONTEND_URL | http://localhost:4200 | Path of the frontend | isString | No |
 | AP_DB_HOST | localhost | Database host | isString | Yes |
-| AP_DB_NAME | exemple-app | Database name | isString | No |
+| AP_DB_NAME | exemple | Database name | isString | No |
 | AP_DB_USER | mongoose | Database user | isString | Yes |
 | AP_DB_PASSWORD | root | Database password | isString | Yes |
-| AP_DB_PORT | 5432 | Database port | isPortNumber | No |
+| AP_DB_PORT | 27017 | Database port | isPortNumber | No |
 | AP_JWT_SECRET | myverysecretkey | JWT secret | isString | Yes |
 | AP_JWT_EXPIRE_IN | 1-day | JWT expiration time | isValidPeriod, isString | No |
 | AP_RTOKEN_LENGTH | 32 | RToken expiration time | isNumber | No |
@@ -28,4 +28,4 @@
 | AP_ADMIN_EMAIL | exemple-app.exemple@exemple.com | Admin email | isEmail, isString | No |
 | AP_ADMIN_PASSWORD | admin | Admin password | isString | Yes |
 
-Generated on 16/05/2022, 20:32:15
+Generated on 19/05/2022, 23:13:03

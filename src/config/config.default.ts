@@ -16,10 +16,10 @@ export const defaultConfig: ConfigEnvironmentDto = {
 
   // Database
   AP_DB_HOST: 'localhost',
-  AP_DB_NAME: 'exemple-app',
+  AP_DB_NAME: 'exemple',
   AP_DB_USER: 'mongoose',
   AP_DB_PASSWORD: 'root',
-  AP_DB_PORT: 5432,
+  AP_DB_PORT: 27017,
 
   // JWT
   AP_JWT_SECRET: 'myverysecretkey',

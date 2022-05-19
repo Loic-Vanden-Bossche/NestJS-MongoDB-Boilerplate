@@ -20,14 +20,15 @@
     "keyofStringsOnly": false,
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "types": ["jest", "node"],
     "paths": {
       "@boilerplate/config": ["libs/config/src/index.ts"],
       "@boilerplate/config/validators": ["libs/config/src/validators/index.ts"],
       "@boilerplate/config/transformers": ["libs/config/src/transformers/index.ts"],
       "@boilerplate/config/decorators": ["libs/config/src/decorators/index.ts"],
       "@boilerplate/utils": ["libs/utils/src/index.ts"],
-      "@boilerplate/changelog": ["libs/changelog/src/index.ts"],
-    },
+      "@boilerplate/changelog": ["libs/changelog/src/index.ts"]
+    }
   },
   "allowSyntheticDefaultImports": true,
   "esModuleInterop": true

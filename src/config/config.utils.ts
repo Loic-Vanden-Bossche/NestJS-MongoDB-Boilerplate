@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { Environment } from './config.default';
+import { DatabaseConfig } from './config';
 
 export const databaseUseSSL = (env: Environment): boolean => {
   return env === Environment.PROD || env === Environment.PREPROD;
@@ -27,3 +28,6 @@ export const getSameSiteStrategy = (
       return 'none';
   }
 };
+
+export const getMongoString = (config: DatabaseConfig): string =>
+  `mongodb://${config.username}:${config.password}@${config.host}:${config.port}/${config.name}`;

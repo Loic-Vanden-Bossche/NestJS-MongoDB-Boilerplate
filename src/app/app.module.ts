@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { getConfig } from '../config/config';
-import { getEnvFilesPaths } from '../config/config.utils';
+import { DatabaseConfig, getConfig } from '../config/config';
+import { getEnvFilesPaths, getMongoString } from '../config/config.utils';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LoggerModule } from '../logger/logger.module';
 import { LogsMiddleware } from '../logger/logs.middleware';
@@ -16,7 +16,13 @@ import { IdentityModule } from '../indentity/identity.module';
       validate: getConfig,
       cache: true,
     }),
-    MongooseModule.forRoot('mongodb://localhost/exemple'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        uri: getMongoString(config.get<DatabaseConfig>('database')),
+      }),
+      inject: [ConfigService],
+    }),
     IdentityModule,
     LoggerModule,
   ],
