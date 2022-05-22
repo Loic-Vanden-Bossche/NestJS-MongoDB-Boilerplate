@@ -14,10 +14,11 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import LoginAuthDto from './dto/login.auth.dto';
 import RegisterAuthDto from './dto/register.auth.dto';
-import ChangePasswordDto from './dto/change-password.dto';
+import ChangePasswordAuthDto from './dto/change-password.auth.dto';
 import CurrentUser from '../users/current';
 import { Public } from '../../shared/decorators/public.decorator';
 import { User } from '../../shared/decorators/user.decorator';
+import ResetPasswordDto from './dto/reset-password.auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -50,6 +51,17 @@ export class AuthController {
   ): Promise<CurrentUser> {
     this.authService.attachCookie(res, await this.authService.getTokens(user));
     return user;
+  }
+
+  @Public()
+  @Get('logout')
+  @ApiOperation({ summary: 'Reset current cookie' })
+  logout(
+    @User() user: CurrentUser,
+    @Res({ passthrough: true }) res: Response,
+  ): { message: string } {
+    this.authService.clearCookie(res);
+    return { message: 'success' };
   }
 
   @Public()
@@ -115,23 +127,17 @@ export class AuthController {
     return user;
   }
 
+  @Public()
   @Get('reset-password')
-  @ApiCookieAuth()
-  @ApiOperation({ summary: '[User] Trigger reset-password procedure' })
-  resetPassword(@User() user: CurrentUser): Promise<string> {
-    return this.authService.resetPassword(user);
+  @ApiOperation({ summary: 'Trigger reset-password procedure' })
+  resetPassword(@Body() resetPassword: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPassword);
   }
 
+  @Public()
   @Post('change-password')
-  @ApiCookieAuth()
-  @ApiOperation({
-    summary:
-      '[User] Change the password of the currently logged user using token',
-  })
-  changePassword(
-    @User() user: CurrentUser,
-    @Body() changePassword: ChangePasswordDto,
-  ) {
-    return this.authService.changePassword(user, changePassword);
+  @ApiOperation({ summary: 'Change the password using token' })
+  changePassword(@Body() changePassword: ChangePasswordAuthDto) {
+    return this.authService.changePassword(changePassword);
   }
 }

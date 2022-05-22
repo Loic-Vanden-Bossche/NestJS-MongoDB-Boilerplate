@@ -4,7 +4,7 @@
   
 | Key | Default | Description | Validators | Protected |
 |:--- | :--- | :--- | :--- | :---|
-| AP_APP_PORT | 3001 | Port to listen on | isPortNumber | No |
+| AP_APP_PORT | 3000 | Port to listen on | isPortNumber | No |
 | AP_APP_ENV | dev | Environment to run in | isEnum | No |
 | AP_APP_VERBOSE | false | Enable debug mode | isBoolean | No |
 | AP_APP_URLS_WHITELIST | http://localhost:4200 | List of urls to proxy | isUrlArray | No |
@@ -28,4 +28,4 @@
 | AP_ADMIN_EMAIL | exemple-app.exemple@exemple.com | Admin email | isEmail, isString | No |
 | AP_ADMIN_PASSWORD | admin | Admin password | isString | Yes |
 
-Generated on 19/05/2022, 23:13:03
+Generated on 21/05/2022, 04:07:52

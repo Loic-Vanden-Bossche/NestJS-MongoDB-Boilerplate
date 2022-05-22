@@ -71,19 +71,37 @@ export class UsersService {
   }
 
   async updateMe(user: CurrentUser, selfUpdate: UpdateMeDto) {
-    await this.isExist(user.id);
-    return this.userModel
-      .findByIdAndUpdate(getObjectId(user.id), selfUpdate)
-      .exec()
-      .then((updated) => new CurrentUser({ ...user, ...updated }));
+    return this.isExist(user.id)
+      .then((user) =>
+        this.authService.processPassword(
+          selfUpdate.newPassword,
+          selfUpdate.newPasswordConfirm,
+          user.password,
+        ),
+      )
+      .then((newPassword) =>
+        this.userModel
+          .findByIdAndUpdate(getObjectId(user.id), {
+            ...selfUpdate,
+            password: newPassword,
+          })
+          .exec(),
+      )
+      .then((u) => new CurrentUser(u));
   }
 
   async update(id: string, userUpdate: UpdateUserDto) {
     await this.isExist(id);
-    return this.userModel.findByIdAndUpdate(getObjectId(id), userUpdate).exec();
+    return this.userModel
+      .findByIdAndUpdate(getObjectId(id), {
+        ...userUpdate,
+        password: await this.authService.hashPassword(userUpdate.password),
+      })
+      .exec();
   }
 
-  delete(id: string) {
+  async delete(id: string) {
+    await this.isExist(id);
     return this.userModel.deleteOne(getObjectId(id)).exec();
   }
 

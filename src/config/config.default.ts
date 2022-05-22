@@ -8,7 +8,7 @@ export enum Environment {
 }
 
 export const defaultConfig: ConfigEnvironmentDto = {
-  AP_APP_PORT: 3001,
+  AP_APP_PORT: 3000,
   AP_APP_ENV: Environment.DEV,
   AP_APP_VERBOSE: false,
   AP_APP_URLS_WHITELIST: ['http://localhost:4200'],

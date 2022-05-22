@@ -7,7 +7,7 @@ import { getExpirationDate } from './auth.utils';
 import LoginAuthDto from './dto/login.auth.dto';
 import RegisterAuthDto from './dto/register.auth.dto';
 import { TokensService } from '../tokens/tokens.service';
-import ChangePasswordDto from './dto/change-password.dto';
+import ChangePasswordAuthDto from './dto/change-password.auth.dto';
 import { User, UserDocument } from '../users/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -18,6 +18,7 @@ import { APIConfig, CookieConfig, RTokenConfig } from '../../config/config';
 import { Environment } from '../../config/config.default';
 import { getSameSiteStrategy } from '../../config/config.utils';
 import { getObjectId } from '@boilerplate/utils';
+import ResetPasswordDto from './dto/reset-password.auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -94,6 +95,11 @@ export class AuthService {
     });
   }
 
+  clearCookie(res: Response) {
+    const config = this.configService.get<CookieConfig>('cookie');
+    res.clearCookie(config.name);
+  }
+
   async validateUserCredentials(
     credentials: LoginAuthDto,
   ): Promise<CurrentUser> {
@@ -129,57 +135,80 @@ export class AuthService {
     );
   }
 
-  async resetPassword(user: CurrentUser): Promise<string> {
-    await this.generateResetPasswordToken(user.id).then((token) =>
-      this.mailsService.sendResetPasswordEmail(user, token),
-    );
-    return 'Change-password email sent.';
+  async resetPassword(resetPassword: ResetPasswordDto) {
+    return this.userModel
+      .findOne({ email: resetPassword.email })
+      .orFail(() => {
+        throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      })
+      .exec()
+      .then((user) =>
+        this.generateResetPasswordToken(user.id).then((token) =>
+          this.mailsService.sendResetPasswordEmail(user, token),
+        ),
+      )
+      .then(() => ({ message: 'Password reset email sent' }));
   }
 
-  async changePassword(
-    currentUser: CurrentUser,
-    changePassword: ChangePasswordDto,
-  ) {
-    const [token, user] = await Promise.all([
-      this.tokensService.validateToken(
-        currentUser.id,
-        changePassword.token,
-        TokenContext.CHANGE_PASSWORD,
-      ),
-      this.userModel
-        .findOne(getObjectId(currentUser.id))
-        .orFail(() => {
-          throw new HttpException('Invalid user', HttpStatus.NOT_FOUND);
-        })
-        .exec(),
-    ]);
+  async processPassword(
+    password: string | undefined,
+    passwordConfirm: string | undefined,
+    old?: string,
+  ): Promise<string | undefined> {
+    if (passwordConfirm && !password) {
+      throw new HttpException(
+        'You must provide a password for password confirmation',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    await Promise.all(
-      [changePassword.oldPassword, changePassword.newPassword].map((pass) =>
-        this.comparePasswords(pass, user.password),
-      ),
-    )
-      .then(([isOk, isSame]) => {
-        if (!isOk) {
-          throw new Error('Bad credentials');
-        }
+    if (password) {
+      if (old && (await this.comparePasswords(password, old))) {
+        throw new HttpException(
+          `New password and old password are the same`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
 
-        if (isSame) {
-          throw new Error('Choose another password than your old one.');
-        }
+      if (passwordConfirm && password !== passwordConfirm) {
+        throw new HttpException(
+          `New password and new password confirmation not match`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      return this.hashPassword(password);
+    }
+    return undefined;
+  }
+
+  async changePassword(changePassword: ChangePasswordAuthDto) {
+    const user = await this.userModel
+      .findOne({ email: changePassword.email })
+      .orFail(() => {
+        throw new HttpException(
+          `User ${changePassword.email} not found`,
+          HttpStatus.NOT_FOUND,
+        );
       })
-      .catch((e) => {
-        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      });
+      .exec();
 
-    await this.hashPassword(changePassword.newPassword)
-      .then((hash) => {
-        return this.userModel
-          .updateOne(getObjectId(user.id), { password: hash })
-          .exec();
+    const token = await this.tokensService.validateToken(
+      user.id,
+      changePassword.token,
+      TokenContext.CHANGE_PASSWORD,
+    );
+
+    return this.userModel
+      .updateOne(getObjectId(user.id), {
+        password: await this.processPassword(
+          changePassword.newPassword,
+          changePassword.newPasswordConfirm,
+          user.password,
+        ),
       })
-      .then(() => this.tokensService.consumeToken(user.id, token));
-
-    return 'Password successfully changed.';
+      .exec()
+      .then(() => this.tokensService.consumeToken(token.id, token))
+      .then(() => ({ message: 'Password changed' }));
   }
 }

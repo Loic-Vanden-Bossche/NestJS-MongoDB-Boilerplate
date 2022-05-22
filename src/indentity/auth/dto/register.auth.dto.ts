@@ -53,4 +53,13 @@ export default class RegisterAuthDto {
     example: '123456',
   })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  @Length(6, 20)
+  @ApiProperty({
+    description: 'User password confirmation',
+    example: '123456',
+  })
+  passwordConfirm?: string;
 }

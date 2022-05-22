@@ -120,6 +120,15 @@ paths:
       tags:
         &a2
         - Auth
+  /auth/logout:
+    get:
+      operationId: AuthController_logout
+      summary: Reset current cookie
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a2
   /auth/register:
     post:
       operationId: AuthController_register
@@ -180,31 +189,33 @@ paths:
   /auth/reset-password:
     get:
       operationId: AuthController_resetPassword
-      summary: "[User] Trigger reset-password procedure"
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags: *a2
-      security:
-        - cookie: []
-  /auth/change-password:
-    post:
-      operationId: AuthController_changePassword
-      summary: "[User] Change the password of the currently logged user using token"
+      summary: Trigger reset-password procedure
       parameters: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChangePasswordDto"
+              $ref: "#/components/schemas/ResetPasswordDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+  /auth/change-password:
+    post:
+      operationId: AuthController_changePassword
+      summary: Change the password using token
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordAuthDto"
       responses:
         "201":
           description: ""
       tags: *a2
-      security:
-        - cookie: []
 info:
   title: Exemple APP
   description: The exemple APP API description
@@ -268,10 +279,20 @@ components:
           type: string
           description: User nickname
           example: Johnny
+        newPassword:
+          type: string
+          description: New user password
+          example: "123456"
+        newPasswordConfirm:
+          type: string
+          description: New user password confirmation
+          example: "123456"
       required:
         - firstname
         - lastname
         - username
+        - newPassword
+        - newPasswordConfirm
     UpdateUserDto:
       type: object
       properties:
@@ -367,28 +388,47 @@ components:
           type: string
           description: User password
           example: "123456"
+        passwordConfirm:
+          type: string
+          description: User password confirmation
+          example: "123456"
       required:
         - email
         - firstname
         - lastname
         - username
         - password
-    ChangePasswordDto:
+        - passwordConfirm
+    ResetPasswordDto:
       type: object
       properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+      required:
+        - email
+    ChangePasswordAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
         token:
           type: string
           description: Change password token
           example: b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb
-        oldPassword:
-          type: string
-          description: Old user password
-          example: "123456"
         newPassword:
           type: string
           description: New user password
           example: "12345612"
+        newPasswordConfirm:
+          type: string
+          description: New user password confirmation
+          example: "123456"
       required:
+        - email
         - token
-        - oldPassword
         - newPassword
+        - newPasswordConfirm
